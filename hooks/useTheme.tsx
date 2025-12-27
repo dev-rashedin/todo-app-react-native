@@ -30,6 +30,12 @@ export interface ColorScheme {
   statusBarStyle: 'light-content' | 'dark-content';
 }
 
+interface ThemeContextType {
+  isDarkMode: boolean;
+  toggleDarkMode: () => void;
+  colors: ColorScheme;
+}
+
 // light theme colors
 const lightColors: ColorScheme = {
   bg: '#f8fafc',
@@ -87,12 +93,6 @@ const darkColors: ColorScheme = {
   },
   statusBarStyle: 'light-content' as const,
 };
-
-interface ThemeContextType {
-  isDarkMode: boolean;
-  toggleDarkMode: () => void;
-  colors: ColorScheme;
-}
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
