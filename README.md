@@ -1,50 +1,98 @@
-# Welcome to your Expo app 👋
+# React Native Todo App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple **Todo application built with React Native and Expo**, created to demonstrate practical mobile development skills for recruiters and fellow developers.
 
-## Get started
+---
 
-1. Install dependencies
+## 🎯 Purpose
 
-   ```bash
-   npm install
-   ```
+This project showcases:
+- Core **React Native fundamentals**
+- Mobile-first thinking (not web reuse)
+- Ability to set up, run, debug, and maintain a real mobile app
+- Familiarity with Expo and Android emulator workflow
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## ✨ Features
 
-In the output, you'll find options to open the app in a
+- Add new todos
+- Mark todos as completed
+- Delete todos
+- Fast Refresh–enabled development
+- Runs on Android Emulator and Expo Go
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🛠 Tech Stack
 
-## Get a fresh project
+- React Native  
+- Expo  
+- JavaScript / TypeScript  
+- Android Emulator / Expo Go  
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
-```
+## 🚀 Getting Started
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Prerequisites
 
-## Learn more
+- Node.js
+- Android Studio (for emulator) or Expo Go
+- Git
 
-To learn more about developing your project with Expo, look at the following resources:
+### Installation
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Clone the repository  
+2. Install dependencies  
+3. Start the development server
 
-## Join the community
+### Run
 
-Join our community of developers creating universal apps.
+Use the local Expo CLI:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+npx expo start
+
+Press `a` to run on the Android emulator or scan the QR code with Expo Go.
+
+---
+
+## 📁 Project Structure
+
+app  
+├─ _layout  
+├─ index  
+
+components  
+hooks  
+utils  
+
+---
+
+## 🧠 What This Project Demonstrates
+
+- React Native component structure
+- State management in a mobile environment
+- Debugging with Metro bundler and emulator
+- Expo-based development workflow
+
+---
+
+## 🔮 Future Improvements
+
+- Persistent storage
+- Edit todos
+- Filters (All / Active / Completed)
+- Animations
+- Dark mode
+
+---
+
+## 👤 Author
+
+Rashedin  
+Backend-focused developer expanding into mobile development with React Native.
+
+---
+
+This project is intended as a **learning-focused yet production-aware** example of React Native development.
