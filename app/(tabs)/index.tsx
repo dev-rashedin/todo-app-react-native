@@ -1,15 +1,22 @@
 
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import useTheme from "@/hooks/useTheme";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function Index() {
 
-  const {toggleDarkMode} = useTheme();
+  const { toggleDarkMode } = useTheme();
+  
+  const todos = useQuery(api.todos.getTodos);
+  
+  console.log('Todos', todos);
+  
 
   return (
     <View style={styles.container}>
       <Text style={styles.content}>
-        Edit app/index.tsx to edit this screen{' '}
+      Todo App
       </Text>
       <Text> Hi There</Text>
       <TouchableOpacity onPress={toggleDarkMode}>
@@ -30,6 +37,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   content: {
-    fontSize: 40
+    fontSize: 48,
+    fontWeight: '700'
   }
 });
