@@ -1,16 +1,25 @@
 import { createHomeStyles } from '@/assets/styles/home.styles';
-import { api } from '@/convex/_generated/api';
-import useTheme from '@/hooks/useTheme';
-import { useMutation, useQuery } from 'convex/react';
-import { Alert, FlatList, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
+import EmptyState from '@/components/EmptyState';
 import Header from '@/components/Header';
-import TodoInput from '@/components/TodoInput';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { Doc } from '@/convex/_generated/dataModel';
+import TodoInput from '@/components/TodoInput';
+import { api } from '@/convex/_generated/api';
+import { Doc, Id } from '@/convex/_generated/dataModel';
+import useTheme from '@/hooks/useTheme';
+import { Ionicons } from '@expo/vector-icons';
+import { useMutation, useQuery } from 'convex/react';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  Alert,
+  FlatList,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-type Todo = Doc<"todos">
+type Todo = Doc<'todos'>;
 
 export default function Index() {
   const { toggleDarkMode, colors } = useTheme();
@@ -19,10 +28,10 @@ export default function Index() {
 
   // db actions
   const todos = useQuery(api.todos.getTodos);
+  const toggleTodo = useMutation(api.todos.toggleTodo);
   // const resetAll = useMutation(api.todos.clearAllTodos);
 
-
-  const isLoading = todos === undefined
+  const isLoading = todos === undefined;
 
   // const handleReset = async () => {
   //   try {
@@ -33,7 +42,16 @@ export default function Index() {
   //   }
   // };
 
-  const renderTodoItem = ({ item } : { item: Todo }) => {
+  const handleToggleTodo = async (id: Id<'todos'>) => {
+    try {
+      await toggleTodo({ id });
+    } catch (error) {
+      console.error('Error toggling todo', error);
+      Alert.alert('Error', 'Failed to toggle todo');
+    }
+  };
+
+  const renderTodoItem = ({ item }: { item: Todo }) => {
     return (
       <View style={homeStyles.todoItemWrapper}>
         <LinearGradient
@@ -45,18 +63,42 @@ export default function Index() {
           <TouchableOpacity
             style={homeStyles.checkbox}
             activeOpacity={0.7}
-            onPress={() => {}}
+            onPress={() => {
+              handleToggleTodo(item._id);
+            }}
           >
-
-
+            <LinearGradient
+              colors={
+                item.isCompleted
+                  ? colors.gradients.success
+                  : colors.gradients.muted
+              }
+              style={homeStyles.checkboxInner}
+            >
+              {item.isCompleted && (
+                <Ionicons name='checkmark' size={18} color='#fff' />
+              )}
+            </LinearGradient>
           </TouchableOpacity>
-          
-          </LinearGradient>
-     </View>
-    );
-  }
+          <View style={homeStyles.todoTextContainer}>
+            <Text style={[
+              homeStyles.todoText,
+              item.isCompleted && {
+                textDecorationLine: 'line-through',
+                color: colors.textMuted,
+                opacity: 0.6
+              }
 
-  if(isLoading) return <LoadingSpinner/>
+            ]}>
+              {item.text}
+            </Text>
+          </View>
+        </LinearGradient>
+      </View>
+    );
+  };
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <LinearGradient
@@ -67,13 +109,14 @@ export default function Index() {
       <SafeAreaView style={homeStyles.safeArea}>
         <Header />
         <TodoInput />
-       
+
         <FlatList
-          data={todos}
+          data={[]}
           renderItem={renderTodoItem}
           keyExtractor={(item) => item._id}
           style={homeStyles.todoList}
           contentContainerStyle={homeStyles.todoListContent}
+          ListEmptyComponent={<EmptyState />}
         />
       </SafeAreaView>
     </LinearGradient>

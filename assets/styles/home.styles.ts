@@ -150,7 +150,7 @@ export const createHomeStyles = (colors: ColorScheme) => {
       width: 32,
       height: 32,
       borderRadius: 16,
-      borderWidth: 2,
+      borderWidth: 0,
       justifyContent: 'center',
       alignItems: 'center',
     },
