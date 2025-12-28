@@ -1,10 +1,12 @@
 import { api } from '@/convex/_generated/api';
-import useTheme from '@/hooks/useTheme';
+import useTheme, { ColorScheme } from '@/hooks/useTheme';
 import { useMutation, useQuery } from 'convex/react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function Index() {
-  const { toggleDarkMode } = useTheme();
+  const { toggleDarkMode, colors } = useTheme();
+
+  const styles = createStyles(colors);
 
   const todos = useQuery(api.todos.getTodos);
   const addTodo = useMutation(api.todos.createTodo);
@@ -51,32 +53,37 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    gap: 10,
-  },
-  content: {
-    fontSize: 48,
-    fontWeight: '700',
-  },
-  addTodoBtn: {
-    backgroundColor: '#f4995cff',
-    padding: 10,
-    borderRadius: 5,
-    cursor: 'pointer',
-  },
-  resetBtn: {
-    backgroundColor: '#f80404ff',
-    width: 125,
-    display: 'flex',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 5,
-    color: 'white',
-    cursor: 'pointer',
-  },
-});
+const createStyles = (colors: ColorScheme) => {
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 20,
+      gap: 10,
+      backgroundColor: colors.bg,
+    },
+    content: {
+      fontSize: 48,
+      fontWeight: '700',
+    },
+    addTodoBtn: {
+      backgroundColor: '#f4995cff',
+      padding: 10,
+      borderRadius: 5,
+      cursor: 'pointer',
+    },
+    resetBtn: {
+      backgroundColor: '#f80404ff',
+      width: 125,
+      display: 'flex',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 5,
+      color: 'white',
+      cursor: 'pointer',
+    },
+  });
+
+  return styles;
+}
