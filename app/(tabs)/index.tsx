@@ -1,32 +1,55 @@
-
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import useTheme from "@/hooks/useTheme";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { api } from '@/convex/_generated/api';
+import useTheme from '@/hooks/useTheme';
+import { useMutation, useQuery } from 'convex/react';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function Index() {
-
   const { toggleDarkMode } = useTheme();
-  
+
   const todos = useQuery(api.todos.getTodos);
-  
-  console.log('Todos', todos);
-  
+  const addTodo = useMutation(api.todos.createTodo);
+  const resetAll = useMutation(api.todos.clearAllTodos);
+
+  console.log('All todos from DB', todos);
+
+  const handleAddTodo = async () => {
+    try {
+      await addTodo({
+        title: 'Finish React Native Course',
+        description:
+          'Learn React Native by building 4 apps. They are Todo App, Notes App, Weather App, and Chat App. And become a React Native expert!',
+      });
+    } catch (error) {
+      console.error('Error creating todo', error);
+      Alert.alert('Error', 'Failed to create todo');
+    }
+  };
+
+  const handleReset = async () => {
+    try {
+      await resetAll();
+    } catch (error) {
+      console.error('Error resetting', error);
+      Alert.alert('Error', 'Failed to reset');
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.content}>
-      Todo App
-      </Text>
+      <Text style={styles.content}>Todo App</Text>
       <Text> Hi There</Text>
       <TouchableOpacity onPress={toggleDarkMode}>
         <Text>toggle the mode</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.addTodoBtn} onPress={handleAddTodo}>
+        <Text>Add A New Todo</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
+        <Text>Reset</Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -38,6 +61,22 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 48,
-    fontWeight: '700'
-  }
+    fontWeight: '700',
+  },
+  addTodoBtn: {
+    backgroundColor: '#f4995cff',
+    padding: 10,
+    borderRadius: 5,
+    cursor: 'pointer',
+  },
+  resetBtn: {
+    backgroundColor: '#f80404ff',
+    width: 125,
+    display: 'flex',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 5,
+    color: 'white',
+    cursor: 'pointer',
+  },
 });
