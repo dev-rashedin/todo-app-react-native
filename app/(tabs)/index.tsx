@@ -1,12 +1,13 @@
+import { createHomeStyles } from '@/assets/styles/home.styles';
 import { api } from '@/convex/_generated/api';
-import useTheme, { ColorScheme } from '@/hooks/useTheme';
+import useTheme from '@/hooks/useTheme';
 import { useMutation, useQuery } from 'convex/react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert,  Text, TouchableOpacity, View } from 'react-native';
 
 export default function Index() {
   const { toggleDarkMode, colors } = useTheme();
 
-  const styles = createStyles(colors);
+  const homeStyles = createHomeStyles(colors);
 
   const todos = useQuery(api.todos.getTodos);
   const addTodo = useMutation(api.todos.createTodo);
@@ -37,53 +38,18 @@ export default function Index() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.content}>Todo App</Text>
+    <View >
+      <Text>Todo App</Text>
       <Text> Hi There</Text>
       <TouchableOpacity onPress={toggleDarkMode}>
         <Text>toggle the mode</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.addTodoBtn} onPress={handleAddTodo}>
+      <TouchableOpacity onPress={handleAddTodo}>
         <Text>Add A New Todo</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
+      <TouchableOpacity onPress={handleReset}>
         <Text>Reset</Text>
       </TouchableOpacity>
     </View>
   );
-}
-
-const createStyles = (colors: ColorScheme) => {
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-      gap: 10,
-      backgroundColor: colors.bg,
-    },
-    content: {
-      fontSize: 48,
-      fontWeight: '700',
-    },
-    addTodoBtn: {
-      backgroundColor: '#f4995cff',
-      padding: 10,
-      borderRadius: 5,
-      cursor: 'pointer',
-    },
-    resetBtn: {
-      backgroundColor: '#f80404ff',
-      width: 125,
-      display: 'flex',
-      alignItems: 'center',
-      padding: 10,
-      borderRadius: 5,
-      color: 'white',
-      cursor: 'pointer',
-    },
-  });
-
-  return styles;
 }
