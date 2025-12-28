@@ -2,18 +2,19 @@ import { createHomeStyles } from '@/assets/styles/home.styles';
 import { api } from '@/convex/_generated/api';
 import useTheme from '@/hooks/useTheme';
 import { useMutation, useQuery } from 'convex/react';
-import { Alert,  Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StatusBar, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import Header from '@/components/Header';
 
 export default function Index() {
   const { toggleDarkMode, colors } = useTheme();
 
   const homeStyles = createHomeStyles(colors);
 
-  const todos = useQuery(api.todos.getTodos);
   const addTodo = useMutation(api.todos.createTodo);
   const resetAll = useMutation(api.todos.clearAllTodos);
 
-  console.log('All todos from DB', todos);
 
   const handleAddTodo = async () => {
     try {
@@ -38,18 +39,24 @@ export default function Index() {
   };
 
   return (
-    <View >
-      <Text>Todo App</Text>
-      <Text> Hi There</Text>
-      <TouchableOpacity onPress={toggleDarkMode}>
-        <Text>toggle the mode</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleAddTodo}>
-        <Text>Add A New Todo</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleReset}>
-        <Text>Reset</Text>
-      </TouchableOpacity>
-    </View>
+    <LinearGradient colors={colors.gradients.background} style={homeStyles.container}>
+      <StatusBar barStyle={colors.statusBarStyle}/>
+      <SafeAreaView style={homeStyles.safeArea}>
+       <Header/>
+        <TouchableOpacity onPress={toggleDarkMode}>
+          <Text>toggle the mode</Text>
+        </TouchableOpacity>
+
+
+
+        {/* TODO: for later */}
+        <TouchableOpacity onPress={handleAddTodo}>
+          <Text>Add A New Todo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleReset}>
+          <Text>Reset</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }

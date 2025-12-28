@@ -78,7 +78,7 @@ const darkColors: ColorScheme = {
   danger: '#f87171',
   shadow: '#000000',
   gradients: {
-    background: ['#0f172a', '#1e293b'],
+    background: ['#0f182bff', '#0b0f17ff'],
     surface: ['#1e293b', '#334155'],
     primary: ['#3b82f6', '#1d4ed8'],
     success: ['#10b981', '#059669'],
