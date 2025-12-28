@@ -12,11 +12,14 @@ export const getTodos = query({
 
 // create a todo
 export const createTodo = mutation({
-  args: { title: v.string(), description: v.optional(v.string()) },
+  args: {
+    title: v.string(),
+    description: v.optional(v.string())
+  },
   handler: async (ctx, args) => {
     const todoId = await ctx.db.insert('todos', {
       title: args.title,
-      description: args.description || '',
+      ...(args.description ? { description: args.description } : {}),
       isCompleted: false,
     });
 
