@@ -4,6 +4,7 @@ import EmptyState from '@/components/EmptyState';
 import Header from '@/components/Header';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import TodoInput from '@/components/TodoInput';
+import TodoItemCard from '@/components/TodoItemCard';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import useTheme from '@/hooks/useTheme';
@@ -110,46 +111,11 @@ export default function Index() {
           />
           ) : (
             //   text and action buttons
-            <View style={homeStyles.todoTextContainer}>
-              {/* todo text */}
-              <Text
-                style={[
-                  homeStyles.todoText,
-                  item.isCompleted && {
-                    textDecorationLine: 'line-through',
-                    color: colors.textMuted,
-                    opacity: 0.6,
-                  },
-                ]}
-              >
-                {item.text}
-              </Text>
-              {/* Edit & Delete Button */}
-              <View style={homeStyles.todoActions}>
-                <TouchableOpacity
-                  onPress={() => handleEditTodo(item)}
-                  activeOpacity={0.8}
-                >
-                  <LinearGradient
-                    colors={colors.gradients.warning}
-                    style={homeStyles.actionButton}
-                  >
-                    <Ionicons name='pencil' size={15} color='#fff' />
-                  </LinearGradient>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleDeleteTodo(item._id)}
-                  activeOpacity={0.8}
-                >
-                  <LinearGradient
-                    colors={colors.gradients.danger}
-                    style={homeStyles.actionButton}
-                  >
-                    <Ionicons name='trash' size={15} color='#fff' />
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-            </View>
+           <TodoItemCard
+                item={item}
+                handleEditTodo={handleEditTodo}
+                handleDeleteTodo={handleDeleteTodo}
+              />
           )}
         </LinearGradient>
       </View>
