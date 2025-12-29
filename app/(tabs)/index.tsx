@@ -36,19 +36,11 @@ export default function Index() {
   const toggleTodo = useMutation(api.todos.toggleTodo);
   const deleteTodo = useMutation(api.todos.deleteTodo);
   const updateTodo = useMutation(api.todos.updateTodo);
-  // const resetAll = useMutation(api.todos.clearAllTodos);
 
   const isLoading = todos === undefined;
 
-  // const handleReset = async () => {
-  //   try {
-  //     await resetAll();
-  //   } catch (error) {
-  //     console.error('Error resetting', error);
-  //     Alert.alert('Error', 'Failed to reset');
-  //   }
-  // };
 
+// toggle todo
   const handleToggleTodo = async (id: Id<'todos'>) => {
     try {
       await toggleTodo({ id });
@@ -58,6 +50,7 @@ export default function Index() {
     }
   };
 
+  // delete todo
    const handleDeleteTodo = (id: Id<'todos'>) => {
      Alert.alert('Delete Todo', 'Are you sure you want to delete this todo?', [
        { text: 'Cancel', style: 'cancel' },
@@ -69,10 +62,13 @@ export default function Index() {
      ]);
    };
   
+  // edit todo
   const handleEditTodo = (todo: Todo) => {
     setEditText(todo.text);
     setEditingId(todo._id);
   }
+
+  // save edit
   const handleSaveEdit = async () => {
 
     if (editingId) {
