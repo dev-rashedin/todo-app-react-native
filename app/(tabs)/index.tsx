@@ -135,7 +135,9 @@ export default function Index() {
                 placeholder='Edit your todo...'
                 placeholderTextColor={colors.textMuted}
               />
+              {/* save and cancel buttons */}
               <View style={homeStyles.editButton}>
+                {/* save button */}
                 <TouchableOpacity onPress={handleSaveEdit} activeOpacity={0.8}>
                   <LinearGradient
                     colors={colors.gradients.success}
@@ -143,6 +145,19 @@ export default function Index() {
                   >
                     <Ionicons name='checkmark' size={16} color='#fff' />
                     <Text style={homeStyles.editButtonText}>Save</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                {/* cancel button */}
+                <TouchableOpacity
+                  onPress={handleCancelEdit}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={colors.gradients.muted}
+                    style={homeStyles.editButton}
+                  >
+                    <Ionicons name='close' size={16} color='#fff' />
+                    <Text style={homeStyles.editButtonText}>Cancel</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>
