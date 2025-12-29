@@ -1,7 +1,7 @@
 
 
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import EditContainer from './EditContainer';
 import TodoItemCard from './TodoItemCard';
 import useTheme from '@/hooks/useTheme';

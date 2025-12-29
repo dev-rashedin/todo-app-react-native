@@ -1,23 +1,18 @@
 import { createHomeStyles } from '@/assets/styles/home.styles';
-import { api } from '@/convex/_generated/api';
+import useStats from '@/hooks/useStats';
 import useTheme from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery } from 'convex/react';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text } from 'react-native'
 const Header = () => {
   const { colors } = useTheme();
+  const { completedTodos, totalTodos, progressPercentage } = useStats();
 
   // styles
   const homeStyles = createHomeStyles(colors)
-
-  // fetch all todos from DB
-  const todos = useQuery(api.todos.getTodos);
   
-// calculate progress bar percentage
-  const completedCount = todos ? todos.filter((todo) => todo.isCompleted).length : 0;
-  const totalCount = todos ? todos.length : 0;
-  const progressPercentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+
   
   return (
     <View style={homeStyles.header}>
@@ -34,14 +29,14 @@ const Header = () => {
         <View style={homeStyles.titleTextContainer}>
           <Text style={homeStyles.title}>Today&apos;s Tasks 𖣠</Text>
           <Text style={homeStyles.subtitle}>
-            {completedCount} of {totalCount} completed
+            {completedTodos} of {totalTodos} completed
           </Text> 
         </View>
       </View>
 
       {/* progress bar */}
       {
-        totalCount > 0 && (
+        totalTodos > 0 && (
           <View style={homeStyles.progressContainer}>
             <View style={homeStyles.progressBarContainer}>
               <View style={homeStyles.progressBar}>
