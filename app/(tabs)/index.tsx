@@ -1,14 +1,12 @@
 import { createHomeStyles } from '@/assets/styles/home.styles';
-import EditContainer from '@/components/EditContainer';
 import EmptyState from '@/components/EmptyState';
 import Header from '@/components/Header';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import TodoInput from '@/components/TodoInput';
-import TodoItemCard from '@/components/TodoItemCard';
+import TodoItemContainer from '@/components/TodoItemContainer';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import useTheme from '@/hooks/useTheme';
-import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from 'convex/react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
@@ -16,9 +14,6 @@ import {
   Alert,
   FlatList,
   StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -36,11 +31,11 @@ export default function Index() {
   const todos = useQuery(api.todos.getTodos);
   const toggleTodo = useMutation(api.todos.toggleTodo);
   const deleteTodo = useMutation(api.todos.deleteTodo);
+  const updateTodo = useMutation(api.todos.updateTodo);
 
   const isLoading = todos === undefined;
 
-
-// toggle todo
+  // toggle todo
   const handleToggleTodo = async (id: Id<'todos'>) => {
     try {
       await toggleTodo({ id });
@@ -51,74 +46,58 @@ export default function Index() {
   };
 
   // delete todo
-   const handleDeleteTodo = (id: Id<'todos'>) => {
-     Alert.alert('Delete Todo', 'Are you sure you want to delete this todo?', [
-       { text: 'Cancel', style: 'cancel' },
-       {
-         text: 'Delete',
-         style: 'destructive',
-         onPress: () => deleteTodo({ id }),
-       },
-     ]);
-   };
-  
+  const handleDeleteTodo = (id: Id<'todos'>) => {
+    Alert.alert('Delete Todo', 'Are you sure you want to delete this todo?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => deleteTodo({ id }),
+      },
+    ]);
+  };
+
   // edit todo
   const handleEditTodo = (todo: Todo) => {
     setEditText(todo.text);
     setEditingId(todo._id);
-  }
+  };
+
+  // save edit
+  const handleSaveEdit = async () => {
+    if (editingId) {
+      try {
+        await updateTodo({ id: editingId, text: editText.trim() });
+        setEditingId(null);
+        setEditText('');
+      } catch (error) {
+        console.error('Error updating todo', error);
+        Alert.alert('Error', 'Failed to update todo');
+      }
+    }
+  };
+
+  // cancel edit
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText('');
+  };
 
   const renderTodoItem = ({ item }: { item: Todo }) => {
-
     const isEditing = editingId === item._id;
 
     return (
-      <View style={homeStyles.todoItemWrapper}>
-        <LinearGradient
-          colors={colors.gradients.surface}
-          style={homeStyles.todoItem}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          {/* checkbox */}
-          <TouchableOpacity
-            style={homeStyles.checkbox}
-            activeOpacity={0.7}
-            onPress={() => {
-              handleToggleTodo(item._id);
-            }}
-          >
-            <LinearGradient
-              colors={
-                item.isCompleted
-                  ? colors.gradients.success
-                  : colors.gradients.muted
-              }
-              style={homeStyles.checkboxInner}
-            >
-              {item.isCompleted && (
-                <Ionicons name='checkmark' size={18} color='#fff' />
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {isEditing ? (
-           <EditContainer
-            editText={editText}
-            setEditText={setEditText}
-            editingId={editingId}
-            setEditingId={setEditingId}
-          />
-          ) : (
-            //   text and action buttons
-           <TodoItemCard
-                item={item}
-                handleEditTodo={handleEditTodo}
-                handleDeleteTodo={handleDeleteTodo}
-              />
-          )}
-        </LinearGradient>
-      </View>
+      <TodoItemContainer
+        item={item}
+        handleToggleTodo={handleToggleTodo}
+        handleDeleteTodo={handleDeleteTodo}
+        handleEditTodo={handleEditTodo}
+        isEditing={isEditing}
+        editText={editText}
+        setEditText={setEditText}
+        handleSaveEdit={handleSaveEdit}
+        handleCancelEdit={handleCancelEdit}
+      />
     );
   };
 
