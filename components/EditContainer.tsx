@@ -1,21 +1,52 @@
-
 import { createHomeStyles } from '@/assets/styles/home.styles';
-import { Doc, Id } from '@/convex/_generated/dataModel';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 import useTheme from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
+import { useMutation } from 'convex/react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-type Todo = Doc<"todos">
 
-const EditContainer = () => {
+type EditContainerProps = {
+  editText: string;
+  setEditText: (text: string) => void;
+  editingId: Id<'todos'> | null;
+  setEditingId: (id: Id<'todos'> | null) => void;
+};
 
+const EditContainer = ({
+  editText,
+  setEditText,
+  editingId,
+  setEditingId,
+}: EditContainerProps) => {
   const { colors } = useTheme();
-  const [editingId, setEditingId] = useState<Id<'todos'> | null>(null);
-    const [editText, setEditText] = useState('');
 
   const homeStyles = createHomeStyles(colors);
+
+  // db actions
+  const updateTodo = useMutation(api.todos.updateTodo);
+
+
+  // save edit
+  const handleSaveEdit = async () => {
+    if (editingId) {
+      try {
+        await updateTodo({ id: editingId, text: editText.trim() });
+        setEditingId(null);
+        setEditText('');
+      } catch (error) {
+        console.error('Error updating todo', error);
+        Alert.alert('Error', 'Failed to update todo');
+      }
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText('');
+  };
 
   return (
     <View style={homeStyles.editContainer}>
@@ -53,5 +84,5 @@ const EditContainer = () => {
       </View>
     </View>
   );
-}
-export default EditContainer
+};
+export default EditContainer;

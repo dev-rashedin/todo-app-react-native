@@ -1,4 +1,5 @@
 import { createHomeStyles } from '@/assets/styles/home.styles';
+import EditContainer from '@/components/EditContainer';
 import EmptyState from '@/components/EmptyState';
 import Header from '@/components/Header';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -15,7 +16,6 @@ import {
   FlatList,
   StatusBar,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -35,7 +35,6 @@ export default function Index() {
   const todos = useQuery(api.todos.getTodos);
   const toggleTodo = useMutation(api.todos.toggleTodo);
   const deleteTodo = useMutation(api.todos.deleteTodo);
-  const updateTodo = useMutation(api.todos.updateTodo);
 
   const isLoading = todos === undefined;
 
@@ -67,28 +66,6 @@ export default function Index() {
     setEditText(todo.text);
     setEditingId(todo._id);
   }
-
-  // save edit
-  const handleSaveEdit = async () => {
-
-    if (editingId) {
-      try {
-        await updateTodo({ id: editingId, text: editText.trim() });
-        setEditingId(null);
-        setEditText('');
-      } catch (error) {
-        console.error('Error updating todo', error);
-        Alert.alert('Error', 'Failed to update todo');
-      }
-    }
-
-  }
-
-  const handleCancelEdit = () => {
-    setEditingId(null);
-    setEditText('');
-  };
-
 
   const renderTodoItem = ({ item }: { item: Todo }) => {
 
@@ -125,43 +102,12 @@ export default function Index() {
           </TouchableOpacity>
 
           {isEditing ? (
-            <View style={homeStyles.editContainer}>
-              <TextInput
-                style={homeStyles.editInput}
-                value={editText}
-                onChangeText={setEditText}
-                autoFocus
-                multiline
-                placeholder='Edit your todo...'
-                placeholderTextColor={colors.textMuted}
-              />
-              {/* save and cancel buttons */}
-              <View style={homeStyles.editButton}>
-                {/* save button */}
-                <TouchableOpacity onPress={handleSaveEdit} activeOpacity={0.8}>
-                  <LinearGradient
-                    colors={colors.gradients.success}
-                    style={homeStyles.editButton}
-                  >
-                    <Ionicons name='checkmark' size={16} color='#fff' />
-                    <Text style={homeStyles.editButtonText}>Save</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-                {/* cancel button */}
-                <TouchableOpacity
-                  onPress={handleCancelEdit}
-                  activeOpacity={0.8}
-                >
-                  <LinearGradient
-                    colors={colors.gradients.muted}
-                    style={homeStyles.editButton}
-                  >
-                    <Ionicons name='close' size={16} color='#fff' />
-                    <Text style={homeStyles.editButtonText}>Cancel</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-            </View>
+           <EditContainer
+            editText={editText}
+            setEditText={setEditText}
+            editingId={editingId}
+            setEditingId={setEditingId}
+          />
           ) : (
             //   text and action buttons
             <View style={homeStyles.todoTextContainer}>
