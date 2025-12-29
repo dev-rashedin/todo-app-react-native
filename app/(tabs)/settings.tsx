@@ -1,4 +1,5 @@
 import { createSettingsStyles } from '@/assets/styles/settings.styles';
+import DangerZone from '@/components/DangerZone';
 import Preferences from '@/components/Preferences';
 import ProgressStats from '@/components/ProgressStats';
 import useTheme from '@/hooks/useTheme';
@@ -12,15 +13,6 @@ const SettingsScreen = () => {
   const { colors} = useTheme();
 
   const settingsStyles = createSettingsStyles(colors);
-
-  // const handleReset = async () => {
-  //   try {
-  //     await resetAll();
-  //   } catch (error) {
-  //     console.error('Error resetting', error);
-  //     Alert.alert('Error', 'Failed to reset');
-  //   }
-  // };
 
   return (
     <LinearGradient colors={colors.gradients.background} style={settingsStyles.container}>
@@ -45,7 +37,8 @@ const SettingsScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <ProgressStats />
-          <Preferences/>
+          <Preferences />
+          <DangerZone/>
 
         </ScrollView>
       </SafeAreaView>
